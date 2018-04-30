@@ -8,7 +8,7 @@ const { table } = require('table');
 function checkInventory(productID) {
 
     return new Promise((resolve, reject) => {
-        connection.query('SELECT stock_quantity FROM products where ID = ?', [productID], (err, res) => {
+        connection.query('SELECT stock_quantity FROM products where id = ?', [productID], (err, res) => {
 
             let quantity = res[0].stock_quantity;
 

@@ -46,7 +46,7 @@ function start() {
         logTableFromArray(productArray);
         //TODO format output
 
-        let productID, numRequested, stock;
+        let productID, numRequested, price, stock;
 
         inquirer.prompt([
             {
@@ -74,15 +74,18 @@ function start() {
                 connection.query('UPDATE products SET stock_quantity = ?  WHERE id = ?', [stock - numRequested, productID],
                     (err, res) => {
                         if (err) throw err;
-
-                        console.log("Product purchased!")
+                        connection.query('SELECT price FROM products WHERE id = ?', [productID], (err, res) => {
+                            if(err) throw err;
+                            price = res[0].price;
+                            console.log(`Product purchased! Total: $${price*numRequested}`);
+                            connection.end();
+                        });
+                        
                     });   
             } 
             else {
                 console.log("Sorry, item out of stock");
             }
-
-            connection.end();
 
         }).catch((err) => {
             console.log(err);
